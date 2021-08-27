@@ -5,8 +5,12 @@
     <string name="tmkoc">Taarak Mehta Ka Ooltah Chashmah - Full Episode 509 - 7th March, 2020</string>
     <string name="video_thumbnail">Video thumbnail</string>
     <string name="channel">Channel</string>
+    <string name="date">Date</string>
+    <string name="_879">879</string>
+    <string name="_02_02">02-02</string>
     <string name="likes">Likes</string>
     <string name="views">Views</string>
-    <string name="date">Date</string>
+    <string name="year">year</string>
     <string name="description">Description</string>
+    <string name="video_thumbn">Video Thumbnail</string>
 </resources>

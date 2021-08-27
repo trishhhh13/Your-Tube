@@ -6,6 +6,7 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 
+//Class to create single object and not to create new ones when called
 class MySingleton constructor(context: Context) {
 
     companion object {
