@@ -3,6 +3,11 @@
     package="com.trishala13kohad.yourtube">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <queries>
+        <intent>
+            <action android:name="com.google.android.youtube.api.service.START" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -13,7 +18,10 @@
         android:theme="@style/Theme.YourTube">
         <activity
             android:name=".VideoActivity"
-            android:exported="true" />
+            android:label="Videos"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:parentActivityName=".MainActivity"
+            android:exported="true"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

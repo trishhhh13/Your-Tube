@@ -5,5 +5,6 @@ data class VideoDetails (
     val thumbnailUrl: String,
     val date: String,
     val description: String,
-    val channelName: String
+    val channelName: String,
+    val ids: String
         )
