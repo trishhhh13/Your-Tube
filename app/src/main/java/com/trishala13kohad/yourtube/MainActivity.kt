@@ -15,10 +15,17 @@ import com.android.volley.toolbox.JsonObjectRequest
 class MainActivity : AppCompatActivity(), VideoClicked {
 
     private lateinit var mAdapter: VideoAdapter
-     lateinit var pb :ProgressBar
+    lateinit var pb: ProgressBar
+    private lateinit var next: ImageView
+    private lateinit var previous: ImageView
+    var pointer = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        previous = findViewById(R.id.previous)
+        next = findViewById(R.id.next)
 
         pb = findViewById(R.id.spinner)
         //Setting recycler view layout
@@ -30,20 +37,43 @@ class MainActivity : AppCompatActivity(), VideoClicked {
 
         //Setting onClickListener for e item in the recycler view
         search.setOnClickListener {
-            searchFromKeyword(keyword.text.toString())
+            if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
+                searchFromKeyword(keyword.text.toString())
+            }
+        }
+
+        previous.setOnClickListener {
+            if (pointer >= 10) {
+                pointer -= 10
+                if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
+                    searchFromKeyword(keyword.text.toString())
+                }
+            }
+        }
+        next.setOnClickListener {
+            if (pointer <= 90) {
+                pointer += 10
+                if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
+                    searchFromKeyword(keyword.text.toString())
+                }
+            }
         }
 
         //Setting custom adapter with the recycler view
         mAdapter = VideoAdapter(this)
         recyclerView.adapter = mAdapter
     }
-    private fun searchFromKeyword(word: String){
+
+    private fun searchFromKeyword(word: String) {
+
+        val apiKey = "AIzaSyAfsQCIRwzbvDMGDbeQGowzl53GqF7FXws"
 
         //Showing progress bas as the search begins
         pb.visibility = View.VISIBLE
 
         //Youtube url for searching list
-        val url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=videos&maxResults=100&q=$word&key=AIzaSyC94z0-8uL9DGCgVzWK9EKC8kqyhWkl2S4"
+        val url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=videos&" +
+                "maxResults=100&q=$word&key=$apiKey"
 
         //Json object request for the title, thumbnail etc. of the video
         val jsonObjectRequest = JsonObjectRequest(
@@ -56,13 +86,15 @@ class MainActivity : AppCompatActivity(), VideoClicked {
                 val videosArray = ArrayList<VideoDetails>()
                 videosArray.clear()
 
-                for(i in 0 until videoJsonArray.length()){
+                for (i in pointer until pointer + 10) {
                     val videosJsonObject = videoJsonArray.getJSONObject(i)
 
                     val id = videosJsonObject.getJSONObject("id").getString("videoId")
 
+
                     //URL to get likes and views of a particular video
-                    val urli = "https://youtube.googleapis.com/youtube/v3/videos?part=statistics&id=$id&key=AIzaSyC94z0-8uL9DGCgVzWK9EKC8kqyhWkl2S4"
+                    val urli = "https://youtube.googleapis.com/youtube/v3/videos?part=statistics&" +
+                            "id=$id&key=$apiKey"
                     val jsonObjectRequest = JsonObjectRequest(
                         Request.Method.GET,
                         urli, null,
@@ -71,14 +103,14 @@ class MainActivity : AppCompatActivity(), VideoClicked {
 
                             //Arraylist to store likes and views of the particular video
                             val lVArray = ArrayList<LikesViews>()
-                                val videosJsonObject1 = videoJsonArray1.getJSONObject(0)
+                            val videosJsonObject1 = videoJsonArray1.getJSONObject(0)
 
-                                val stats = videosJsonObject1.getJSONObject("statistics")
-                                val likes = stats.getString("likeCount")
-                                val views = stats.getString("viewCount")
+                            val stats = videosJsonObject1.getJSONObject("statistics")
+                            val likes = stats.getString("likeCount")
+                            val views = stats.getString("viewCount")
 
                             //Adding to the array containing likes and views
-                                lVArray.add(LikesViews(likes, views))
+                            lVArray.add(LikesViews(likes, views))
 
                             //Updating to theUI
                             mAdapter.updateVide(lVArray)
@@ -94,7 +126,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
                     val channel = snippet.getString("channelTitle")
 
                     //getting date when the video got published
-                    val date = snippet.getString("publishedAt").substring(0,10)
+                    val date = snippet.getString("publishedAt").substring(0, 10)
 
                     //getting title of the video
                     val title = snippet.getString("title")
@@ -113,6 +145,8 @@ class MainActivity : AppCompatActivity(), VideoClicked {
                 }
                 //updating the details to the UI
                 mAdapter.updateVideo(videosArray)
+                next.visibility = View.VISIBLE
+                previous.visibility = View.VISIBLE
 
                 //making progressbar go away
                 pb.visibility = View.GONE
@@ -129,7 +163,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
 
         //Putting extras to display in the result activity
         i.putExtra("ids", item.ids)
-        i.putExtra("description",item.description)
+        i.putExtra("description", item.description)
         i.putExtra("date", item.date)
         i.putExtra("channel", item.channelName)
         i.putExtra("title", item.title)

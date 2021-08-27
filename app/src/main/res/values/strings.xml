@@ -13,4 +13,6 @@
     <string name="year">year</string>
     <string name="description">Description</string>
     <string name="video_thumbn">Video Thumbnail</string>
+    <string name="next_button">Next Button</string>
+    <string name="previous_button">Previous Button</string>
 </resources>
