@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
 
     private fun searchFromKeyword(word: String) {
 
-        val apiKey = "AIzaSyAfsQCIRwzbvDMGDbeQGowzl53GqF7FXws"
+        val apiKey = "AIzaSyC6BapxSV6RjNY_XT_Kna0nP3YlhJxt-ZA"
 
         //Showing progress bas as the search begins
         pb.visibility = View.VISIBLE
