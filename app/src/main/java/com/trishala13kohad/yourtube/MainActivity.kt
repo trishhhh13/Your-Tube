@@ -13,7 +13,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.BuildConfig
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import java.lang.Exception
@@ -29,7 +28,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
     private lateinit var imageView: ImageView
     private lateinit var keyword: TextView
     private var pointer = 0
-    private val apiKey = "AIzaSyCu5crsj5ij7CThP-sh_55JQAoa2DnkcTg"
+    private val apiKey = BuildConfig.YOU_KEY
     //Arraylist to store the details of the video
     private val videosArray = ArrayList<VideoDetails>()
     override fun onCreate(savedInstanceState: Bundle?) {
