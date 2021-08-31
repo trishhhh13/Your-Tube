@@ -15,4 +15,7 @@
     <string name="video_thumbn">Video Thumbnail</string>
     <string name="next_button">Next Button</string>
     <string name="previous_button">Previous Button</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="no_text_found">No text found</string>
+    <string name="no_results_found">No data found</string>
 </resources>
