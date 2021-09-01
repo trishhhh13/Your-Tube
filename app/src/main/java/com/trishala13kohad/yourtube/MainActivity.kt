@@ -27,9 +27,12 @@ class MainActivity : AppCompatActivity(), VideoClicked {
     private lateinit var textView: TextView
     private lateinit var imageView: ImageView
     private lateinit var keyword: TextView
+    private lateinit var pageToken: String
     private var pointer = 0
     private var point = 0
-    lateinit var pageToken: String
+    var pg = 1
+    private var nextClick = false
+    private var prevClick = false
     private val apiKey = BuildConfig.YOU_KEY
     //Arraylist to store the details of the video
     private val videosArray = ArrayList<VideoDetails>()
@@ -40,7 +43,6 @@ class MainActivity : AppCompatActivity(), VideoClicked {
 
         previous = findViewById(R.id.previous)
         next = findViewById(R.id.next)
-
         pb = findViewById(R.id.spinner)
         //Setting recycler view layout
         recyclerView = findViewById(R.id.recyclerView)
@@ -79,17 +81,32 @@ class MainActivity : AppCompatActivity(), VideoClicked {
         }
 
         previous.setOnClickListener {
+            println("$point space $pointer")
             if (point >= 10) {
+                prevClick = true
                 point -= 10
+                pg -= 1
+                println(pg)
                 if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
                     searchByKeyword(keyword.text.toString())
                 }
             }
-            else if(pointer >=10){
+            else if(pointer >= 10 && !prevClick){
                 pointer -= 10
+                pg-=1
+                println(pg)
                 if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
                     searchFromKeyword(keyword.text.toString())
                 }
+            }
+            else if (pointer == 40){
+                prevClick = false
+                pg -= 1
+                println(pg)
+                if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
+                    searchFromKeyword(keyword.text.toString())
+                }
+
             }
             else {
                 Toast.makeText(this, "Click on > to go to next page",
@@ -98,14 +115,27 @@ class MainActivity : AppCompatActivity(), VideoClicked {
         }
         next.setOnClickListener {
             if (pointer <= 39) {
+                nextClick = true
                 pointer += 10
-                if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
+                pg+=1
+                println(pg)
+                if(keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
                     searchFromKeyword(keyword.text.toString())
                 }
             }
-            else if(point <= 89){
+            else if(point == 0 && nextClick){
+                nextClick = false
+                pg+=1
+                println(pg)
+                if(keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
+                    searchByKeyword(keyword.text.toString())
+                }
+            }
+            else if(point <= 39){
                 point += 10
-                if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
+                pg+=1
+                println(pg)
+                if(keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
                     searchByKeyword(keyword.text.toString())
                 }
             }
@@ -307,7 +337,14 @@ class MainActivity : AppCompatActivity(), VideoClicked {
             pointer -= 10
             searchFromKeyword(keyword.text.toString())
             true
-        } else super.onKeyDown(keyCode, event)
+        }
+        else if(keyCode == KeyEvent.KEYCODE_BACK && point >=10) {
+                point -= 10
+                searchByKeyword(keyword.text.toString())
+                true
+            }
+        else
+        super.onKeyDown(keyCode, event)
     }
 
     private fun likesAndViews(id: String){
