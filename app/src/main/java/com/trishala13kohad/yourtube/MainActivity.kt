@@ -43,6 +43,8 @@ class MainActivity : AppCompatActivity(), VideoClicked {
     //to save unit numbers
     private var pointer = 0
     private var point = 0
+
+    //pageNo to show at the bottom
     private var pg = 1
 
     //to find when the next and previous button is clicked for the first time or not
