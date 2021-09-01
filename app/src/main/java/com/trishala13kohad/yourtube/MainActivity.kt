@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
+import org.w3c.dom.Text
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity(), VideoClicked {
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
     private lateinit var imageView: ImageView
     private lateinit var keyword: TextView
     private lateinit var pageToken: String
+    private lateinit var pageNo: TextView
     private var pointer = 0
     private var point = 0
     var pg = 1
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
         previous = findViewById(R.id.previous)
         next = findViewById(R.id.next)
         pb = findViewById(R.id.spinner)
+        pageNo = findViewById(R.id.pageNo)
         //Setting recycler view layout
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -86,7 +89,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
                 prevClick = true
                 point -= 10
                 pg -= 1
-                println(pg)
+                pageNo.text = pg.toString()
                 if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
                     searchByKeyword(keyword.text.toString())
                 }
@@ -94,7 +97,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
             else if(pointer >= 10 && !prevClick){
                 pointer -= 10
                 pg-=1
-                println(pg)
+                pageNo.text = pg.toString()
                 if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
                     searchFromKeyword(keyword.text.toString())
                 }
@@ -102,7 +105,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
             else if (pointer == 40){
                 prevClick = false
                 pg -= 1
-                println(pg)
+                pageNo.text = pg.toString()
                 if (keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
                     searchFromKeyword(keyword.text.toString())
                 }
@@ -118,7 +121,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
                 nextClick = true
                 pointer += 10
                 pg+=1
-                println(pg)
+                pageNo.text = pg.toString()
                 if(keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
                     searchFromKeyword(keyword.text.toString())
                 }
@@ -126,7 +129,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
             else if(point == 0 && nextClick){
                 nextClick = false
                 pg+=1
-                println(pg)
+                pageNo.text = pg.toString()
                 if(keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
                     searchByKeyword(keyword.text.toString())
                 }
@@ -134,7 +137,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
             else if(point <= 39){
                 point += 10
                 pg+=1
-                println(pg)
+                pageNo.text = pg.toString()
                 if(keyword.text.toString() != "" && keyword.text.toString().trim() != "") {
                     searchByKeyword(keyword.text.toString())
                 }
@@ -217,6 +220,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
                     mAdapter.updateVideo(videosArray)
                     next.visibility = View.VISIBLE
                     previous.visibility = View.VISIBLE
+                    pageNo.visibility = View.VISIBLE
 
                     //making progressbar go away
                     pb.visibility = View.GONE
@@ -230,6 +234,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
                     textView.visibility = View.VISIBLE
                     imageView.visibility = View.VISIBLE
                     pb.visibility = View.GONE
+                    pageNo.visibility = View.GONE
 
 
 
@@ -309,6 +314,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
                     mAdapter.updateVideo(videosArray)
                     next.visibility = View.VISIBLE
                     previous.visibility = View.VISIBLE
+                    pageNo.visibility = View.VISIBLE
 
                     //making progressbar go away
                     pb.visibility = View.GONE
@@ -321,6 +327,7 @@ class MainActivity : AppCompatActivity(), VideoClicked {
                     recyclerView.visibility = View.GONE
                     textView.visibility = View.VISIBLE
                     imageView.visibility = View.VISIBLE
+                    pageNo.visibility = View.GONE
                     pb.visibility = View.GONE
 
 
@@ -335,11 +342,15 @@ class MainActivity : AppCompatActivity(), VideoClicked {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         return if (keyCode == KeyEvent.KEYCODE_BACK && pointer>=10) {
             pointer -= 10
+            pg-=1
+            pageNo.text = pg.toString()
             searchFromKeyword(keyword.text.toString())
             true
         }
         else if(keyCode == KeyEvent.KEYCODE_BACK && point >=10) {
                 point -= 10
+            pg -= 1
+            pageNo.text = pg.toString()
                 searchByKeyword(keyword.text.toString())
                 true
             }
